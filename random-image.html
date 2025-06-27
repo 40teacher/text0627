@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>随机图片</title>
+    <script>
+        // 配置你的图片库信息（修改以下三个变量）
+        const GITHUB_USER = "40teacher";      // 例如 "johnsmith"
+        const REPO_NAME = "text0627";             // 例如 "my-images"
+        const IMAGE_FOLDER = ""; // 例如 "photos/" 或留空""
+
+        // 图片列表（无需手动填写，自动获取）
+        let imageList = [];
+
+        // 从GitHub API获取图片列表
+        async function loadImageList() {
+            const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${IMAGE_FOLDER}`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                const files = await response.json();
+                
+                // 过滤出图片文件
+                imageList = files.filter(file => 
+                    file.name.match(/\.(jpeg|jpg|png|gif|webp)$/i)
+                ).map(file => file.download_url);
+                
+                redirectToRandomImage();
+            } catch (error) {
+                document.body.innerHTML = `<h1>加载失败，请检查配置</h1><p>${error}</p>`;
+            }
+        }
+
+        // 随机跳转到一张图片
+        function redirectToRandomImage() {
+            if (imageList.length === 0) {
+                document.body.innerHTML = "<h1>未找到图片</h1>";
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * imageList.length);
+            window.location.href = imageList[randomIndex];
+        }
+
+        // 页面加载时启动
+        window.onload = loadImageList;
+    </script>
+</head>
+<body>
+    <h1>正在加载随机练习...</h1>
+</body>
+</html>
