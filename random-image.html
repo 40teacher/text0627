@@ -22,7 +22,7 @@
                 // 过滤出图片文件
                 imageList = files.filter(file => 
                     file.name.match(/\.(jpeg|jpg|png|gif|webp)$/i)
-                ).map(file => file.download_url);
+                ).map(file => `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${REPO_NAME}/${file.path}`);
                 
                 redirectToRandomImage();
             } catch (error) {
